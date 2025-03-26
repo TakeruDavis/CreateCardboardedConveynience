@@ -1,6 +1,6 @@
-package net.TakeruDavis.yourmodid.register.config;
+package net.TakeruDavis.create_cardboarded_conveynience.register.config;
 
-import mod.TakeruDavis.yourmodid.BuildConfig;
+import mod.TakeruDavis.create_cardboarded_conveynience.BuildConfig;
 import net.createmod.catnip.config.ConfigBase;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "net.TakeruDavis.create_cardboarded_conveynience.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "create_cardboarded_conveynience.refmap.json",
+  "mixins": [
+    "CardboardArmorHandlerMixin",
+    "ChainConveyorRidingHandlerMixin",
+    "ServerChainConveyorHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "minVersion": "0.8"
+}

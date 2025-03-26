@@ -1,8 +1,8 @@
-package net.TakeruDavis.yourmodid.register.config;
+package net.TakeruDavis.create_cardboarded_conveynience.register.config;
 
 import com.simibubi.create.api.registry.SimpleRegistry;
 import com.simibubi.create.api.stress.BlockStressValues;
-import mod.TakeruDavis.yourmodid.BuildConfig;
+import mod.TakeruDavis.create_cardboarded_conveynience.BuildConfig;
 import net.createmod.catnip.data.Couple;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
