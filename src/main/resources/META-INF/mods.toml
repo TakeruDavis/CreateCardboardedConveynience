@@ -15,13 +15,13 @@ license = "MIT License"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId = "create_cardboarded_conveynience" #mandatory TODO: change this!
+modId = "create_cardboarded_conveynience" #mandatory
 # The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
 # ${file.jarVersion} will substitute the value of the Implementation-Version as read from the mod's JAR file metadata
 # see the associated build.gradle script for how to populate this completely automatically during a build
-version = "${file.jarVersion}" #mandatory
+version = "0.0.2" #mandatory
 # A display name for the mod
-displayName = "Create Cardboarded Conveynience" #mandatory TODO: change this!
+displayName = "Create Cardboarded Conveynience" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification <here>
 #updateJSONURL="http://myurl.me/" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
@@ -31,10 +31,11 @@ displayName = "Create Cardboarded Conveynience" #mandatory TODO: change this!
 # A text field displayed in the mod UI
 #credits="Thanks for this example mod goes to Java" #optional
 # A text field displayed in the mod UI
-#authors = "You" #optional
-# The description text for the mod (multi line!) (#mandatory) TODO: change this!
+authors = "TakeruDavis"
+# The description text for the mod (multi line!) (#mandatory)
 description = '''
-Your Create addon description!
+A small tweak allowing players to be disguised as packages even on chain conveyor.
+Extra chain conveyor related features may come in the future.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.create_cardboarded_conveynience]] #optional
@@ -43,7 +44,7 @@ modId = "forge" #mandatory
 # Does this dependency have to exist - if not, ordering below must be specified
 mandatory = true #mandatory
 # The version range of the dependency
-versionRange = "[47.2.6,)" #mandatory
+versionRange = "[47.1.0,)" #mandatory
 # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
 ordering = "NONE"
 # Side this dependency is applied on - BOTH, CLIENT or SERVER
