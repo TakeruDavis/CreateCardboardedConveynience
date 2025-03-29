@@ -2,7 +2,6 @@ package net.TakeruDavis.create_cardboarded_conveynience.utils;
 
 import com.google.common.cache.Cache;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.simibubi.create.AllItems;
 import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.content.equipment.armor.CardboardArmorHandler;
 import com.simibubi.create.content.equipment.armor.CardboardArmorHandlerClient;
@@ -13,18 +12,23 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -33,6 +37,13 @@ import java.util.concurrent.ExecutionException;
 public class CardboardHelper {
 
     private static Cache<UUID, Integer> BOXES_PLAYERS_ARE_HIDING_AS;
+
+    private static final Map<EquipmentSlot, ResourceLocation> CARDBOARD_ARMOR = Map.of(
+        EquipmentSlot.HEAD, new ResourceLocation("create", "cardboard_helmet"),
+        EquipmentSlot.CHEST, new ResourceLocation("create", "cardboard_chestplate"),
+        EquipmentSlot.LEGS, new ResourceLocation("create", "cardboard_leggings"),
+        EquipmentSlot.FEET, new ResourceLocation("create", "cardboard_boots")
+    );
 
     private static void initLinked() {
         try {
@@ -45,14 +56,14 @@ public class CardboardHelper {
     }
 
     public static boolean testForArmor(LivingEntity entity) {
-        if (!AllItems.CARDBOARD_HELMET.isIn(entity.getItemBySlot(EquipmentSlot.HEAD)))
-            return false;
-        if (!AllItems.CARDBOARD_CHESTPLATE.isIn(entity.getItemBySlot(EquipmentSlot.CHEST)))
-            return false;
-        if (!AllItems.CARDBOARD_LEGGINGS.isIn(entity.getItemBySlot(EquipmentSlot.LEGS)))
-            return false;
-        if (!AllItems.CARDBOARD_BOOTS.isIn(entity.getItemBySlot(EquipmentSlot.FEET)))
-            return false;
+        for (Map.Entry<EquipmentSlot, ResourceLocation> entry : CARDBOARD_ARMOR.entrySet()) {
+            ItemStack stack = entity.getItemBySlot(entry.getKey());
+            Item expected = ForgeRegistries.ITEMS.getValue(entry.getValue());
+
+            if (expected == null || !expected.equals(stack.getItem())) {
+                return false;
+            }
+        }
         return true;
     }
 
