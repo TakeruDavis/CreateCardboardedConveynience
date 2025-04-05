@@ -12,6 +12,7 @@ import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,29 +21,28 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
 import java.lang.reflect.Field;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-@Mod.EventBusSubscriber({Dist.CLIENT})
+@OnlyIn(Dist.CLIENT)
 public class CardboardHelper {
 
     private static Cache<UUID, Integer> BOXES_PLAYERS_ARE_HIDING_AS;
 
     private static final Map<EquipmentSlot, ResourceLocation> CARDBOARD_ARMOR = Map.of(
-        EquipmentSlot.HEAD, new ResourceLocation("create", "cardboard_helmet"),
-        EquipmentSlot.CHEST, new ResourceLocation("create", "cardboard_chestplate"),
-        EquipmentSlot.LEGS, new ResourceLocation("create", "cardboard_leggings"),
-        EquipmentSlot.FEET, new ResourceLocation("create", "cardboard_boots")
+        EquipmentSlot.HEAD, ResourceLocation.fromNamespaceAndPath("create", "cardboard_helmet"),
+        EquipmentSlot.CHEST, ResourceLocation.fromNamespaceAndPath("create", "cardboard_chestplate"),
+        EquipmentSlot.LEGS, ResourceLocation.fromNamespaceAndPath("create", "cardboard_leggings"),
+        EquipmentSlot.FEET, ResourceLocation.fromNamespaceAndPath("create", "cardboard_boots")
     );
 
     private static void initLinked() {
@@ -58,7 +58,7 @@ public class CardboardHelper {
     public static boolean testForArmor(LivingEntity entity) {
         for (Map.Entry<EquipmentSlot, ResourceLocation> entry : CARDBOARD_ARMOR.entrySet()) {
             ItemStack stack = entity.getItemBySlot(entry.getKey());
-            Item expected = ForgeRegistries.ITEMS.getValue(entry.getValue());
+            Item expected = BuiltInRegistries.ITEM.get(entry.getValue());
 
             if (expected == null || !expected.equals(stack.getItem())) {
                 return false;
