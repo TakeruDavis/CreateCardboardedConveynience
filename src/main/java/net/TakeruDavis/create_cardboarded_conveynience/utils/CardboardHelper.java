@@ -21,11 +21,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.RenderPlayerEvent;
 
 import java.lang.reflect.Field;
@@ -33,7 +30,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-@OnlyIn(Dist.CLIENT)
 public class CardboardHelper {
 
     private static Cache<UUID, Integer> BOXES_PLAYERS_ARE_HIDING_AS;
