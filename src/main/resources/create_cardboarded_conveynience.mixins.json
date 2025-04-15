@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "create_cardboarded_conveynience.refmap.json",
   "mixins": [
+    "BeltTunnelBlockMixin",
     "CardboardArmorHandlerMixin",
     "ChainConveyorRidingHandlerMixin",
     "ServerChainConveyorHandlerMixin"
