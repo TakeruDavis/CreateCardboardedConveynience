@@ -3,6 +3,7 @@
   "package": "net.TakeruDavis.create_cardboarded_conveynience.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BeltTunnelBlockMixin",
     "CardboardArmorHandlerMixin",
     "ChainConveyorRidingHandlerMixin",
     "ServerChainConveyorHandlerMixin"
