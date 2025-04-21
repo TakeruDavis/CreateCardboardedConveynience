@@ -2,10 +2,10 @@ package net.TakeruDavis.create_cardboarded_conveynience.mixin;
 
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
+import com.simibubi.create.content.equipment.armor.CardboardArmorHandler;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelBlock;
 import com.simibubi.create.content.logistics.tunnel.BeltTunnelShapes;
 import com.simibubi.create.content.logistics.tunnel.BrassTunnelBlockEntity;
-import net.TakeruDavis.create_cardboarded_conveynience.utils.CardboardHelper;
 import net.minecraft.core.*;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
@@ -71,7 +71,7 @@ public class BeltTunnelBlockMixin {
                 if (entity instanceof Player player) {
                     HashMap<String, ItemStack> testedItems = new HashMap<>();
 
-                    if (!CardboardHelper.testForArmor(player)) {
+                    if (!CardboardArmorHandler.testForStealth(player)) {
                         testedItems.put("Main hand", player.getMainHandItem());
                         testedItems.put("Off hand", player.getOffhandItem());
                         for (int i = 0; i < 4; i++) {
