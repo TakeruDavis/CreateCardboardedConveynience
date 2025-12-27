@@ -1,0 +1,166 @@
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runs {
+        server {
+            server()
+            name "Fabric Server"
+            ideConfigGenerated true
+            // Offline mode for testing with multiple accounts
+            property "fabric-api:enable-test-world-features", "false"
+        }
+    }
+}
+
+// Configure server.properties for offline mode
+tasks.register("configureServerOfflineMode") {
+    doLast {
+        def serverProps = file("run/server.properties")
+        if (serverProps.exists()) {
+            def content = serverProps.text
+            if (content.contains("online-mode=true")) {
+                serverProps.text = content.replace("online-mode=true", "online-mode=false")
+                println "Set online-mode=false in server.properties"
+            }
+        } else {
+            serverProps.parentFile.mkdirs()
+            serverProps.text = "online-mode=false\neula=true\n"
+            println "Created server.properties with online-mode=false"
+        }
+    }
+}
+
+tasks.matching { it.name == "runServer" }.configureEach {
+    dependsOn "configureServerOfflineMode"
+}
+
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "cardboarded_conveynience_test"
+        enableGameTests = true
+        eula = true
+    }
+}
+
+repositories {
+    // Mod Menu
+    maven { url = "https://maven.terraformersmc.com/releases" }
+    // JamiesWhiteShirt's maven for reach-entity-attributes
+    maven {
+        url = "https://maven.jamieswhiteshirt.com/libs-release"
+        content {
+            includeGroup "com.jamieswhiteshirt"
+        }
+    }
+    // Porting Lib & Registrate
+    maven { url = "https://mvn.devos.one/releases" }
+    maven { url = "https://mvn.devos.one/snapshots" }
+    // Fuzs forge config api port
+    maven {
+        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven"
+        content {
+            includeGroup "fuzs.forgeconfigapiport"
+        }
+    }
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+
+    // Architectury API
+    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+
+    // Create Fabric from Modrinth
+    modImplementation "maven.modrinth:create-fabric:${rootProject.create_fabric_version}"
+
+    // Porting Lib modules (required by Create Fabric) - must match Create's version exactly
+    def portingLibVersion = "2.3.13+1.20.1"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:accessors:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:base:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:entity:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:extensions:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:networking:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:obj_loader:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:tags:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:transfer:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:models:${portingLibVersion}"
+    modImplementation "io.github.fabricators_of_create.Porting-Lib:client_events:${portingLibVersion}"
+
+    // Other Create Fabric dependencies
+    modImplementation("dev.engine-room.flywheel:flywheel-fabric-${rootProject.minecraft_version}:1.0.5-264") {
+        exclude group: "dev.engine-room.flywheel", module: "flywheel-fabric-api-${rootProject.minecraft_version}"
+    }
+    modImplementation "net.createmod.ponder:Ponder-Fabric-${rootProject.minecraft_version}:1.0.91"
+    // Registrate - must be added explicitly for Loom to remap it
+    modImplementation "com.tterrag.registrate_fabric:Registrate:1.3.79-MC1.20.1"
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:8.0.0"
+    modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.4.0"
+
+    // milk-lib - required by Create Fabric 6.x
+    modImplementation "io.github.tropheusj:milk-lib:1.2.60"
+
+    // Mod Menu - dev only for testing mod icon
+    modRuntimeOnly "com.terraformersmc:modmenu:7.2.2"
+
+    // Porting Lib brewing - needed at runtime for Create's mechanical mixer tests
+    modRuntimeOnly "io.github.fabricators_of_create.Porting-Lib:brewing:${portingLibVersion}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand version: project.version
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    input.set shadowJar.archiveFile
+}
+
+// Don't run GameTests as part of the build task
+// Run them explicitly with: ./gradlew :fabric:runGameTest
+afterEvaluate {
+    tasks.named("runGameTest") {
+        onlyIf {
+            gradle.startParameter.taskNames.any {
+                it.toLowerCase().contains("gametest")
+            }
+        }
+    }
+}

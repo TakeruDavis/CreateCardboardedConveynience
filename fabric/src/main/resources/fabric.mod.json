@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "cardboarded_conveynience",
+  "version": "${version}",
+  "name": "Create: Cardboarded Conveynience",
+  "description": "A small tweak allowing players to be disguised as packages even on chain conveyor. Extra chain conveyor related features may come in the future.",
+  "authors": [
+    "TakeruDavis"
+  ],
+  "contact": {
+    "sources": "https://github.com/TakeruDavis/CreateCardboardedConveynience"
+  },
+  "license": "MIT",
+  "icon": "assets/cardboarded_conveynience/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.takerudavis.cardboarded_conveynience.fabric.CardboardedConveynienceFabric"
+    ],
+    "client": [
+      "net.takerudavis.cardboarded_conveynience.fabric.CardboardedConveynienceFabricClient"
+    ]
+  },
+  "mixins": [
+    "cardboarded_conveynience-common.mixins.json",
+    "cardboarded_conveynience-fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "create": "*",
+    "architectury": ">=9.0.0"
+  },
+  "suggests": {
+    "fabric-api": "*"
+  }
+}

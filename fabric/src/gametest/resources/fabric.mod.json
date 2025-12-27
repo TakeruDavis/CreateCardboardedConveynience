@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "cardboarded_conveynience_test",
+  "version": "1.0.0",
+  "name": "Cardboarded Conveynience Tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "net.takerudavis.cardboarded_conveynience.test.BeltTunnelGameTest",
+      "net.takerudavis.cardboarded_conveynience.test.CardboardArmorGameTest"
+    ]
+  },
+  "depends": {
+    "cardboarded_conveynience": "*",
+    "create": "*"
+  }
+}

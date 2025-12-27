@@ -1,0 +1,15 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "net.takerudavis.cardboarded_conveynience.fabric.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "cardboarded_conveynience-fabric-refmap.json",
+  "client": [
+    "CardboardArmorHandlerClientMixin",
+    "EntityAccessor",
+    "LivingEntityDimensionSyncMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

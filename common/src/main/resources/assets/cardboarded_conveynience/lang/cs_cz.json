@@ -1,0 +1,14 @@
+{
+  "advancement.cardboarded_conveynience.like_any_package.title": "Jako Každý Balík",
+  "advancement.cardboarded_conveynience.like_any_package.description": "Svez se na řetězovém dopravníku jako obyčejný balíček",
+
+  "advancement.cardboarded_conveynience.nermal_delivery.title": "Nezmarná Zásilka",
+  "advancement.cardboarded_conveynience.nermal_delivery.description": "Nech se doručit na Žaboport pomocí jmenovky",
+
+  "advancement.cardboarded_conveynience.vertical_delivery.title": "Do Šachty!",
+  "advancement.cardboarded_conveynience.vertical_delivery.description": "Propadni skrz šachtu",
+
+  "cardboarded_conveynience.ponder.cardboard_disguise.header": "Převlek za Balíček",
+  "cardboarded_conveynience.ponder.cardboard_disguise.text_1": "Oblékni si plnou kartonovou zbroj při jízdě na řetězovém dopravníku...",
+  "cardboarded_conveynience.ponder.cardboard_disguise.text_2": "...a převlékni se za balíček!"
+}

@@ -1,180 +1,113 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {url='https://repo.spongepowered.org/maven'}
-        maven { url = 'https://maven.parchmentmc.org' }
-        maven { url = 'https://files.minecraftforge.net/maven' }
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
-        classpath 'org.parchmentmc:librarian:1.+'
-    }
-}
-
 plugins {
-    id'com.github.gmazzo.buildconfig' version '3.0.1'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'dev.architectury.loom' version '1.10-SNAPSHOT' apply false
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
 
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply from: 'https://raw.githubusercontent.com/LordGrimmauld/gitinfo-collect/master/build.gradle'
+architectury {
+    minecraft = project.minecraft_version
+}
 
-group = "mod.${author}.${modid}"
-version = "${minecraft_version}-${mod_version}"
-archivesBaseName = modid
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
+}
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+subprojects {
+    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'architectury-plugin'
+    apply plugin: 'maven-publish'
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
-minecraft {
-    // Mappings (official or parchment) is a matter of preference. Parchment does map some method parameters though while keeping Class-/Method-/Fieldnames same as official.
-     mappings channel: "official", version: "${minecraft_version}"
-//    mappings channel: 'parchment', version: "2022.07.10-${minecraft_version}" // https://ldtteam.jfrog.io/ui/native/parchmentmc-public/org/parchmentmc/data/parchment-1.18.2/
+    base {
+        archivesName = "$rootProject.archives_name-$project.name"
+    }
 
-     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    repositories {
+        // Create mod dependencies
+        maven {
+            name = "devOS One Releases"
+            url = "https://mvn.devos.one/releases"
+        }
+        maven {
+            name = "devOS One Snapshots"
+            url = "https://mvn.devos.one/snapshots"
+        }
+        maven {
+            name = "Create Maven"
+            url = "https://maven.createmod.net"
+        }
+        maven {
+            name = "Tterrag Maven"
+            url = "https://maven.tterrag.com/"
+            // Note: Certificate expired 2025-12-23, using local jar for Forge Registrate
+        }
 
-    runs {
-        client {
-            workingDirectory project.file('run')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "--debug", "--stacktrace", "--scan", "-mixin.config=${modid}.mixins.json".toString()
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${modid}" {
-                    source sourceSets.main
-                }
+        // CurseMaven for CurseForge mods
+        maven {
+            name = "CurseMaven"
+            url = "https://cursemaven.com"
+            content {
+                includeGroup "curse.maven"
             }
         }
 
-        server {
-            workingDirectory project.file('server')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args "-mixin.config=${modid}.mixins.json".toString()
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            mods {
-                "${modid}" {
-                    source sourceSets.main
-                }
+        // Modrinth for Modrinth mods
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
             }
         }
 
-        data {
-            workingDirectory project.file('run')
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-
-            args "--mod", modid, "--all", "--output", file('src/generated/resources/'), "--existing", file('src/main/resources/')
-
-            mods {
-                "${modid}" {
-                    source sourceSets.main
-                }
+        // JamiesWhiteShirt's maven for reach-entity-attributes (Create dependency)
+        maven {
+            url = "https://maven.jamieswhiteshirt.com/libs-release"
+            content {
+                includeGroup "com.jamieswhiteshirt"
             }
+        }
+
+        // Jitpack for some dependencies
+        maven {
+            name = "Jitpack"
+            url = "https://jitpack.io"
+        }
+
+        // Fuzs maven for Forge Config API Port
+        maven {
+            name = "Fuzs Resources"
+            url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven"
         }
     }
-}
 
-configurations {
-    shade
-}
-
-shadowJar {
-    configurations = [project.configurations.shade]
-    relocate 'com.tterrag.registrate', "${group}.registrate"
-}
-
-reobf {
-    shadowJar {}
-}
-
-build.dependsOn shadowJar
-build.dependsOn reobfShadowJar
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
-repositories {
-    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
-    maven { url = "https://maven.tterrag.com" } // Registrate
-    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
-}
-
-dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    implementation(fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false })
-    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
-    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
-    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
-    implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
-    implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-}
-
-compileJava.options.encoding = 'UTF-8'
-
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : modid,
-                "Specification-Vendor"    : author,
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.version,
-                "Implementation-Vendor"   : author,
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs"            : "${modid}.mixins.json"
-        ])
+    dependencies {
+        minecraft "net.minecraft:minecraft:$rootProject.minecraft_version"
+        mappings loom.officialMojangMappings()
     }
-}
 
-mixin {
-    add sourceSets.main, "${modid}.refmap.json"
-}
+    java {
+        withSourcesJar()
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier 'deobf'
-}
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
-}
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
 
-artifacts {
-    archives deobfJar
-}
+    // Configure Maven publishing.
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = base.archivesName.get()
+                from components.java
+            }
+        }
 
-build.dependsOn deobfJar
-
-jar.finalizedBy('reobfJar')
-
-buildConfig {
-    buildConfigField 'String', 'MODID', "\"${modid}\""
-    buildConfigField 'String', 'VERSION', "\"${project.version}\""
-    buildConfigField 'String', 'DISPLAY_NAME', "\"${display_name}\""
-    buildConfigField "String", "GITHASH", "\"${getGitInfo()}\""
-
-    version = project.version
-    packageName = project.group
-}
-
-jar {
-    archiveClassifier.set('slim')
+        repositories {
+            // Add repositories to publish to here.
+        }
+    }
 }
