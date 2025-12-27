@@ -114,6 +114,9 @@ processResources {
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
+    // Exclude test classes and gametest structures from release jar
+    exclude 'net/takerudavis/cardboarded_conveynience/test/**'
+    exclude 'gameteststructures/**'
 }
 
 remapJar {
