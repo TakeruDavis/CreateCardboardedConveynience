@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "net.takerudavis.cardboarded_conveynience.mixin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "cardboarded_conveynience-common-refmap.json",
+  "refmap": "create-cardboarded-conveynience-1.20.1-common-common-refmap.json",
   "mixins": [
     "BeltTunnelBlockMixin",
     "CardboardArmorHandlerMixin",

@@ -27,8 +27,7 @@ public class FrogportAnimationMixin {
         at = @At(
             value = "INVOKE",
             target = "Lcom/simibubi/create/content/logistics/box/PackageItem;isPackage(Lnet/minecraft/world/item/ItemStack;)Z"
-        ),
-        remap = false
+        )
     )
     private boolean cardboarded_conveynience$redirectIsPackageCheck(ItemStack stack) {
         // Check if bypass is requested (consumes the flag)
