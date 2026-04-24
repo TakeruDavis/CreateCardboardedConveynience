@@ -1,0 +1,27 @@
+{
+  "parent": "create:cardboard_armor",
+  "criteria": {
+    "0": {
+      "trigger": "cardboarded_conveynience:disguise_as_package"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.cardboarded_conveynience.like_any_package.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create:cardboard_helmet"
+    },
+    "title": {
+      "translate": "advancement.cardboarded_conveynience.like_any_package.title"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

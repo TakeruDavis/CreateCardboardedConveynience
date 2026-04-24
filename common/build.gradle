@@ -1,0 +1,18 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+dependencies {
+    // Architectury API
+    modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+
+    // NeoForge - compile only for interfaces referenced by Create
+    compileOnly "net.neoforged:neoforge:$rootProject.neoforge_version"
+
+    // Create - using common API
+    modCompileOnly("com.simibubi.create:create-${rootProject.minecraft_version}:${rootProject.create_neoforge_version}:slim") {
+        transitive = false
+    }
+    modCompileOnly "net.createmod.ponder:Ponder-NeoForge-${rootProject.minecraft_version}:${rootProject.ponder_version}"
+    modCompileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-${rootProject.minecraft_version}:${rootProject.flywheel_version}"
+}

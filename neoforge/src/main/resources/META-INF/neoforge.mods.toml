@@ -1,0 +1,45 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "All Rights Reserved"
+issueTrackerURL = "https://github.com/TakeruDavis/CreateCardboardedConveynience/issues"
+
+[[mods]]
+modId = "cardboarded_conveynience"
+version = "${version}"
+displayName = "Create: Cardboarded Conveynience"
+authors = "TakeruDavis"
+description = '''
+A small tweak allowing players to be disguised as packages on chain conveyors.
+Includes nametag routing, chute teleportation, and belt tunnel crawling.
+'''
+
+[[mixins]]
+config = "cardboarded_conveynience-common.mixins.json"
+
+[[dependencies.cardboarded_conveynience]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cardboarded_conveynience]]
+modId = "minecraft"
+type = "required"
+versionRange = "[1.21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.cardboarded_conveynience]]
+modId = "create"
+type = "required"
+versionRange = "[6.0,)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.cardboarded_conveynience]]
+modId = "architectury"
+type = "required"
+versionRange = "[13.0,)"
+ordering = "AFTER"
+side = "BOTH"

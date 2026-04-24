@@ -1,0 +1,28 @@
+{
+  "parent": "cardboarded_conveynience:like_any_package",
+  "criteria": {
+    "0": {
+      "trigger": "cardboarded_conveynience:chute_teleport"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "hidden": true,
+    "description": {
+      "translate": "advancement.cardboarded_conveynience.vertical_delivery.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "create:chute"
+    },
+    "title": {
+      "translate": "advancement.cardboarded_conveynience.vertical_delivery.title"
+    }
+  },
+  "requirements": [
+    [
+      "0"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

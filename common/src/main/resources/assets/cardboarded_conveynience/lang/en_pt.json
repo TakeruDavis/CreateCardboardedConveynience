@@ -1,0 +1,14 @@
+{
+  "advancement.cardboarded_conveynience.like_any_package.title": "Like Any Cargo",
+  "advancement.cardboarded_conveynience.like_any_package.description": "Ride th' chain conveyor like any other booty",
+
+  "advancement.cardboarded_conveynience.nermal_delivery.title": "Jus' a Nermal Shipment",
+  "advancement.cardboarded_conveynience.nermal_delivery.description": "Get shipped t' a Frogport usin' nametag routin', arrr",
+
+  "advancement.cardboarded_conveynience.vertical_delivery.title": "Down th' Hatch!",
+  "advancement.cardboarded_conveynience.vertical_delivery.description": "Plunge through a chute, ye scallywag",
+
+  "cardboarded_conveynience.ponder.cardboard_disguise.header": "Cargo Disguise",
+  "cardboarded_conveynience.ponder.cardboard_disguise.text_1": "Don ye full cardboard armor while ridin' a chain conveyor...",
+  "cardboarded_conveynience.ponder.cardboard_disguise.text_2": "...t' disguise yerself as cargo, savvy?"
+}
