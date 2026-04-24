@@ -1,7 +1,6 @@
 package net.takerudavis.cardboarded_conveynience.test;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 import com.simibubi.create.content.logistics.tunnel.BrassTunnelBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.SidedFilteringBehaviour;
 import net.minecraft.core.BlockPos;
@@ -102,58 +101,6 @@ public class BeltTunnelGameTest {
             projectile.discard();
         }
 
-        helper.succeed();
-    }
-
-    /**
-     * Test PotatoProjectileEntity with potato - should pass through tunnel.
-     */
-    @GameTest(template = "empty3x3x3")
-    @PrefixGameTestTemplate(false)
-    public static void potatoProjectilePassesThroughAndesiteTunnel(GameTestHelper helper) {
-        BlockPos tunnelPos = new BlockPos(1, 1, 1);
-        helper.setBlock(tunnelPos, AllBlocks.ANDESITE_TUNNEL.getDefaultState());
-        Vec3 spawnPos = helper.absoluteVec(Vec3.atCenterOf(tunnelPos));
-
-        PotatoProjectileEntity potato = createPotatoProjectile(helper, spawnPos, new ItemStack(Items.POTATO));
-        helper.getLevel().addFreshEntity(potato);
-
-        // Verify potato projectile returns the potato item
-        helper.assertTrue(
-            potato.getItem().getItem() == Items.POTATO,
-            "Potato projectile should have potato item"
-        );
-
-        VoxelShape shape = getCollisionShape(helper, tunnelPos, potato);
-        helper.assertTrue(isHollowShape(shape), "Potato projectile should get hollow collision shape");
-
-        potato.discard();
-        helper.succeed();
-    }
-
-    /**
-     * Test PotatoProjectileEntity with carrot - should pass through tunnel.
-     */
-    @GameTest(template = "empty3x3x3")
-    @PrefixGameTestTemplate(false)
-    public static void carrotProjectilePassesThroughAndesiteTunnel(GameTestHelper helper) {
-        BlockPos tunnelPos = new BlockPos(1, 1, 1);
-        helper.setBlock(tunnelPos, AllBlocks.ANDESITE_TUNNEL.getDefaultState());
-        Vec3 spawnPos = helper.absoluteVec(Vec3.atCenterOf(tunnelPos));
-
-        PotatoProjectileEntity carrot = createPotatoProjectile(helper, spawnPos, new ItemStack(Items.CARROT));
-        helper.getLevel().addFreshEntity(carrot);
-
-        // Verify carrot projectile returns the carrot item
-        helper.assertTrue(
-            carrot.getItem().getItem() == Items.CARROT,
-            "Carrot projectile should have carrot item"
-        );
-
-        VoxelShape shape = getCollisionShape(helper, tunnelPos, carrot);
-        helper.assertTrue(isHollowShape(shape), "Carrot projectile should get hollow collision shape");
-
-        carrot.discard();
         helper.succeed();
     }
 
@@ -380,19 +327,5 @@ public class BeltTunnelGameTest {
             return null;
         }
         return null;
-    }
-
-    /**
-     * Create a PotatoProjectileEntity with the given food item.
-     */
-    private static PotatoProjectileEntity createPotatoProjectile(GameTestHelper helper, Vec3 pos, ItemStack foodItem) {
-        // Forge requires EntityType-based constructor
-        PotatoProjectileEntity potato = new PotatoProjectileEntity(
-            com.simibubi.create.AllEntityTypes.POTATO_PROJECTILE.get(),
-            helper.getLevel()
-        );
-        potato.setPos(pos.x, pos.y, pos.z);
-        potato.setItem(foodItem);
-        return potato;
     }
 }

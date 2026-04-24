@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -49,6 +50,7 @@ public class ChuteTeleportHelper {
         SUCCESS,
         TOO_LONG,
         FILTERED,
+        POWERED,
         BLOCKED_EXIT
     }
 
@@ -59,6 +61,7 @@ public class ChuteTeleportHelper {
         static ScanResult success(BlockPos lastChute) { return new ScanResult(PathResult.SUCCESS, lastChute); }
         static ScanResult tooLong() { return new ScanResult(PathResult.TOO_LONG, null); }
         static ScanResult filtered() { return new ScanResult(PathResult.FILTERED, null); }
+        static ScanResult powered() { return new ScanResult(PathResult.POWERED, null); }
         static ScanResult blocked() { return new ScanResult(PathResult.BLOCKED_EXIT, null); }
     }
 
@@ -95,6 +98,7 @@ public class ChuteTeleportHelper {
             }
             case TOO_LONG -> showWarning(serverPlayer, "Chute path too long!", currentTick);
             case FILTERED -> showWarning(serverPlayer, "Blocked by smart chute filter", currentTick);
+            case POWERED -> showWarning(serverPlayer, "Smart chute is closed!", currentTick);
             case BLOCKED_EXIT -> showWarning(serverPlayer, "Chute exit is blocked!", currentTick);
         }
     }
@@ -218,6 +222,12 @@ public class ChuteTeleportHelper {
 
             // This is a chute - track it as the last one
             lastChute = current;
+
+            if (state.getBlock() instanceof SmartChuteBlock
+                && state.hasProperty(BlockStateProperties.POWERED)
+                && state.getValue(BlockStateProperties.POWERED)) {
+                return ScanResult.powered();
+            }
 
             // Check smart chute filter - player is a "package", so only allow
             // if filter is empty or filter is set to a package

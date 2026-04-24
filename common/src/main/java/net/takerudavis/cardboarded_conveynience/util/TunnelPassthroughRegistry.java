@@ -17,8 +17,6 @@ import java.util.Map;
 /**
  * Registry of projectile types that can pass through belt tunnels.
  * Maps projectile class to the ItemStack used for brass tunnel filter matching.
- *
- * Note: PotatoProjectileEntity is handled separately as it uses dynamic item lookup.
  */
 public class TunnelPassthroughRegistry {
 
@@ -43,7 +41,6 @@ public class TunnelPassthroughRegistry {
 
     /**
      * Get the filter ItemStack for a given entity, checking static mappings.
-     * Does NOT handle PotatoProjectileEntity - that requires Create dependency.
      *
      * @param entity The entity to check
      * @return The filter ItemStack, or null if not a registered projectile
@@ -60,7 +57,6 @@ public class TunnelPassthroughRegistry {
 
     /**
      * Check if an entity is a registered static projectile type.
-     * Does NOT include PotatoProjectileEntity.
      */
     public static boolean isStaticProjectile(Entity entity) {
         return getFilterItem(entity) != null;

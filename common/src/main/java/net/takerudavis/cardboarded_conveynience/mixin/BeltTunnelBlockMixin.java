@@ -13,7 +13,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
-import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 import net.takerudavis.cardboarded_conveynience.util.TunnelPassthroughRegistry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -61,10 +60,6 @@ public class BeltTunnelBlockMixin {
 
     @Unique
     private static ItemStack cardboarded_conveynience$getProjectileItem(Entity entity) {
-        // PotatoProjectileEntity stores the actual food item being launched - filter by that!
-        if (entity instanceof PotatoProjectileEntity potato) {
-            return potato.getItem();
-        }
         // Check static projectile registry
         return TunnelPassthroughRegistry.getFilterItem(entity);
     }
